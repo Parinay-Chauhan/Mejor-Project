@@ -38,6 +38,26 @@ router.post("/token", requireApiAuth, async (req, res) => {
   }
 });
 
+// Generate a Stream Chat token for guest users (no auth required)
+router.post("/token/guest", async (req, res) => {
+  try {
+    const { guestId } = req.body;
+    if (!guestId || !guestId.startsWith("guest-")) {
+      return res.status(400).json({ error: "Invalid guest ID" });
+    }
+    // Upsert guest user in Stream so they can connect
+    await serverClient.upsertUser({ id: guestId, name: "Guest", role: "user" });
+    const issuedAt = Math.floor(Date.now() / 1000);
+    const expiration = issuedAt + 60 * 60; // 1 hour session
+    const token = serverClient.createToken(guestId, expiration, issuedAt);
+    res.json({ token, userId: guestId });
+  } catch (error) {
+    console.error("Error generating guest token:", error);
+    res.status(500).json({ error: "Failed to generate guest token" });
+  }
+});
+
+
 // Also expose session token for frontend use
 router.post("/api/session-token", requireApiAuth, (req, res) => {
   const token = createSessionToken(req.user.id);

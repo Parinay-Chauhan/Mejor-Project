@@ -1,7 +1,7 @@
 import React from "react";
 import bot from "../assets/bot-stroke-rounded.svg";
 
-const Open = ({inputRef, username}) => {
+const Open = ({inputRef, username, isGuest = false, onLoginClick}) => {
 
   function handleClick(e){
     inputRef.current.value=e.currentTarget.innerText;
@@ -14,7 +14,10 @@ const Open = ({inputRef, username}) => {
     return "Good evening";
   };
 
-  const displayUsername = username ? username.charAt(0).toUpperCase() + username.slice(1) : "";
+  // Guest mode mein koi username nahi dikhana — sirf logged-in users ke liye
+  const displayUsername = (!isGuest && username)
+    ? username.charAt(0).toUpperCase() + username.slice(1)
+    : "";
 
   return (
     <div className="w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 md:px-8">
@@ -31,6 +34,18 @@ const Open = ({inputRef, username}) => {
           From first draft to final edit, i'm here to help you write better,
           faster.
         </p>
+
+        {/* Guest mode banner */}
+        {isGuest && (
+          <button
+            onClick={onLoginClick}
+            className="mt-4 flex items-center gap-2 bg-[#1a0a2e] border border-[#7c3aed]/40 hover:border-[#7c3aed] text-[#c4b5fd] text-xs px-5 py-2.5 rounded-full transition-all hover:bg-[#220d3e] hover:shadow-[0_0_15px_rgba(124,58,237,0.2)] active:scale-95"
+          >
+            <span>💾</span>
+            <span>Login to save your chat history</span>
+            <span className="text-[#7c3aed] font-bold">→</span>
+          </button>
+        )}
         <h2 className="text-lg md:text-xl mt-6 md:mt-10 font-bold text-white mx-auto text-center font-segoe">
           What would you like to write today?
         </h2>
