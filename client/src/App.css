@@ -1,0 +1,24 @@
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000; /* Black track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7c3aed; /* Purple thumb */
+  border-radius: 10px;
+  border: 2px solid #000000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9333ea; /* Lighter purple on hover */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #7c3aed #000000;
+}
