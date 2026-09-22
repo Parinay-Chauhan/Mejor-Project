@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI Assistant Login</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #101116;
+            --panel: #18191f;
+            --panel-border: #2a2c34;
+            --text: #f3f3f5;
+            --muted: #8f9098;
+            --input: #101116;
+            --purple: #6d39db;
+            --purple-strong: #7c3ff2;
+            --danger: #ff6b7a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .login-card {
+            width: min(92vw, 560px);
+            padding: 34px 32px 30px;
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            background: var(--panel);
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 22px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        .icon {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: linear-gradient(135deg, var(--purple), var(--purple-strong));
+            box-shadow: 0 14px 30px rgba(109, 57, 219, 0.3);
+        }
+
+        .icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: white;
+        }
+
+        h1 {
+            margin: 0;
+            text-align: center;
+            font-size: 24px;
+            line-height: 1.2;
+            letter-spacing: 0;
+        }
+
+        .subtitle {
+            margin: 12px 0 30px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #f0f0f3;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            height: 50px;
+            margin-bottom: 20px;
+            padding: 0 15px;
+            border: 1px solid #24262d;
+            border-radius: 10px;
+            outline: none;
+            background: var(--input);
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-color: var(--purple-strong);
+            box-shadow: 0 0 0 3px rgba(124, 63, 242, 0.18);
+        }
+
+        .error {
+            margin: -4px 0 18px;
+            color: var(--danger);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            height: 50px;
+            border: 0;
+            border-radius: 10px;
+            background: #5c35a8;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #6a3cc0;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <main class="login-card">
+        <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 8V4H8"></path>
+                <rect width="16" height="12" x="4" y="8" rx="2"></rect>
+                <path d="M2 14h2"></path>
+                <path d="M20 14h2"></path>
+                <path d="M9 13v2"></path>
+                <path d="M15 13v2"></path>
+            </svg>
+        </div>
+
+        <h1>Welcome to AI Assistant</h1>
+        <p class="subtitle">Enter your username and password to start chatting with your AI assistant.</p>
+
+        <form method="post" action="/login">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" placeholder="Enter your name..." value="<%= username || '' %>" autocomplete="username" required>
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="Enter your password..." autocomplete="current-password" required>
+
+            <% if (error) { %>
+                <p class="error"><%= error %></p>
+            <% } %>
+
+            <button type="submit">Start Chatting</button>
+        </form>
+    </main>
+</body>
+</html>
