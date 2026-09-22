@@ -1,71 +1,93 @@
 import React from "react";
-import bot from "../assets/bot-stroke-rounded.svg";
 
-const Open = ({inputRef, username, isGuest = false, onLoginClick}) => {
+const prompts = [
+  { icon: "✉️", text: "Write a professional email to my manager about a project update" },
+  { icon: "💼", text: "Draft a compelling LinkedIn post about a recent achievement" },
+  { icon: "📊", text: "Create an executive summary for a quarterly business report" },
+  { icon: "🎯", text: "Write a persuasive proposal for a new marketing campaign" },
+];
 
-  function handleClick(e){
-    inputRef.current.value=e.currentTarget.innerText;
+const Open = ({ inputRef, username, isGuest = false, onLoginClick }) => {
+
+  function handleClick(e) {
+    const text = e.currentTarget.querySelector("span.prompt-text")?.textContent;
+    if (text && inputRef.current) {
+      inputRef.current.value = text;
+      inputRef.current.focus();
+    }
   }
 
   const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
+    const h = new Date().getHours();
+    if (h < 12) return "Good morning";
+    if (h < 17) return "Good afternoon";
     return "Good evening";
   };
 
-  // Guest mode mein koi username nahi dikhana — sirf logged-in users ke liye
-  const displayUsername = (!isGuest && username)
+  const displayName = (!isGuest && username)
     ? username.charAt(0).toUpperCase() + username.slice(1)
-    : "";
+    : null;
 
   return (
-    <div className="w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 md:px-8">
-      <div className="flex flex-col items-center gap-2 pb-6">
-        <img
-          className="h-14 w-14 md:h-17 md:w-17 mt-5 p-3 rounded-2xl bg-[#000000]"
-          src={bot}
-          alt="image"
-        />
-        <h2 className="text-2xl md:text-4xl font-segoe font-bold text-white mx-auto mt-2 tracking-wide text-center">
-          {getGreeting()}{displayUsername ? `, ${displayUsername}` : ""}
-        </h2>
-        <p className="text-white font-normal text-center text-base leading-6 font-segoe mt-2">
-          From first draft to final edit, i'm here to help you write better,
-          faster.
+    <div className="w-full flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+      <div className="flex flex-col items-center justify-center min-h-full px-4 md:px-6 py-10 fade-up">
+
+        {/* Logo mark */}
+        <div className="w-12 h-12 rounded-2xl bg-[#7c3aed] flex items-center justify-center shadow-[0_0_30px_rgba(124,58,237,0.35)] mb-6">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+
+        {/* Greeting */}
+        <h1 className="text-2xl md:text-3xl font-semibold text-[#fafafa] tracking-tight text-center">
+          {getGreeting()}{displayName ? `, ${displayName}` : ""}
+        </h1>
+        <p className="text-[#71717a] text-sm mt-2 text-center max-w-sm leading-relaxed">
+          Your AI writing assistant. From first draft to final edit — faster.
         </p>
 
-        {/* Guest mode banner */}
+        {/* Guest banner */}
         {isGuest && (
           <button
             onClick={onLoginClick}
-            className="mt-4 flex items-center gap-2 bg-[#1a0a2e] border border-[#7c3aed]/40 hover:border-[#7c3aed] text-[#c4b5fd] text-xs px-5 py-2.5 rounded-full transition-all hover:bg-[#220d3e] hover:shadow-[0_0_15px_rgba(124,58,237,0.2)] active:scale-95"
+            className="mt-5 flex items-center gap-2 px-4 py-2 rounded-full border border-[#7c3aed]/30 bg-[#13092a] text-[#a78bfa] text-xs font-medium hover:border-[#7c3aed]/60 hover:bg-[#1a0d38] transition-all duration-200 active:scale-95"
           >
-            <span>💾</span>
-            <span>Login to save your chat history</span>
-            <span className="text-[#7c3aed] font-bold">→</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17,21 17,13 7,13 7,21"/>
+              <polyline points="7,3 7,8 15,8"/>
+            </svg>
+            Sign in to save your conversation
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </button>
         )}
-        <h2 className="text-lg md:text-xl mt-6 md:mt-10 font-bold text-white mx-auto text-center font-segoe">
-          What would you like to write today?
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-6 md:mt-10 text-white p-2 w-full max-w-4xl">
-          <button onClick={handleClick} className="py-4 md:py-6 px-6 md:px-10 bg-[#212121] rounded-2xl text-xs md:text-sm cursor-pointer border border-transparent hover:border-violet-600 hover:bg-[#0a0b14] hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(124,58,237,0.2)] active:scale-95 active:bg-violet-900/30 transition-all duration-300">
-            Write a professional email to my boss about a project update
-          </button>
 
-          <button onClick={handleClick} className="py-4 md:py-6 px-6 md:px-10 bg-[#212121] rounded-2xl text-xs md:text-sm cursor-pointer border border-transparent hover:border-violet-600 hover:bg-[#0a0b14] hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(124,58,237,0.2)] active:scale-95 active:bg-violet-900/30 transition-all duration-300">
-            Draft a compelling LinkedIn post about a recent achievement
-          </button>
+        {/* Suggestion label */}
+        <p className="text-[#52525b] text-xs font-medium uppercase tracking-widest mt-10 mb-4">
+          Suggestions
+        </p>
 
-          <button onClick={handleClick} className="py-4 md:py-6 px-6 md:px-10 bg-[#212121] rounded-2xl text-xs md:text-sm cursor-pointer border border-transparent hover:border-violet-600 hover:bg-[#0a0b14] hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(124,58,237,0.2)] active:scale-95 active:bg-violet-900/30 transition-all duration-300">
-            Create an executive summary for a quarterly business report
-          </button>
-
-          <button onClick={handleClick} className="py-4 md:py-6 px-6 md:px-10 bg-[#212121] rounded-2xl text-xs md:text-sm cursor-pointer border border-transparent hover:border-violet-600 hover:bg-[#0a0b14] hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(124,58,237,0.2)] active:scale-95 active:bg-violet-900/30 transition-all duration-300">
-            Write a persuasive proposal for a new marketing campaign
-          </button>
+        {/* Prompt cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full max-w-2xl">
+          {prompts.map((p, i) => (
+            <button
+              key={i}
+              onClick={handleClick}
+              className="group text-left flex items-start gap-3 px-4 py-3.5 rounded-xl bg-[#111113] border border-[#1f1f23] hover:border-[#7c3aed]/40 hover:bg-[#18181b] transition-all duration-200 active:scale-[0.98] cursor-pointer"
+            >
+              <span className="text-base shrink-0 mt-0.5">{p.icon}</span>
+              <span className="prompt-text text-[#a1a1aa] text-xs leading-relaxed group-hover:text-[#fafafa] transition-colors duration-200">
+                {p.text}
+              </span>
+            </button>
+          ))}
         </div>
+
       </div>
     </div>
   );

@@ -1,50 +1,26 @@
 import React, { useRef, useState } from "react";
-import Search from "../assets/search.svg";
-import Mic from "../assets/mic.svg";
-import Stop from "../assets/stop.svg";
 
 const Input = ({ inputRef, handleSubmit }) => {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef(null);
 
   const startListening = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      return;
-    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
 
     const recognition = new SpeechRecognition();
-
     recognition.lang = "en-US";
     recognition.continuous = true;
     recognition.interimResults = false;
-
     recognitionRef.current = recognition;
 
-    recognition.onstart = () => {
-      setIsListening(true);
-    };
-
+    recognition.onstart = () => setIsListening(true);
     recognition.onresult = (event) => {
-      const transcript =
-        event.results[event.results.length - 1][0].transcript;
-
-      if (inputRef.current) {
-        inputRef.current.value += " " + transcript;
-      }
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      if (inputRef.current) inputRef.current.value += " " + transcript;
     };
-
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
     recognition.start();
   };
 
@@ -53,50 +29,70 @@ const Input = ({ inputRef, handleSubmit }) => {
     setIsListening(false);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) handleSubmit(e);
+  };
+
   return (
-    <>
-      <form
-        onSubmit={handleSubmit}
-        className="w-full h-20 md:h-24 border-t flex items-center justify-center border-[#4c4c4c] px-4 md:px-8 shrink-0 bg-black/20"
-      >
-        <div className="relative w-full max-w-5xl mx-auto h-[65%] flex items-center">
+    <div className="w-full shrink-0 px-4 md:px-6 pb-5 pt-3 bg-[#09090b] border-t border-[#1f1f23]">
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+        <div className="relative flex items-center bg-[#111113] border border-[#27272a] rounded-2xl hover:border-[#3f3f46] transition-colors duration-200 focus-within:border-[#7c3aed] focus-within:shadow-[0_0_0_3px_rgba(124,58,237,0.12)]">
+
+          {/* Text input */}
           <input
-            placeholder="How can I help you? Write your question here."
-            className="bg-[#212121] w-full border-2 border-white hover:border-[#7c3aed] h-full text-white text-sm md:text-base py-3 md:py-5 pl-4 md:pl-5 pr-[110px] md:pr-[120px] rounded-4xl outline-none"
-            type="text"
             ref={inputRef}
+            type="text"
+            onKeyDown={handleKeyDown}
+            placeholder="Ask me anything..."
+            className="flex-1 bg-transparent text-[#fafafa] text-sm placeholder-[#52525b] py-3.5 pl-4 pr-2 outline-none rounded-2xl"
           />
 
-          <div className="absolute right-3 flex items-center gap-1">
-            {/* Mic / Stop Button */}
-            {isListening ? (
-              <button
-                type="button"
-                onClick={stopListening}
-                className="flex items-center justify-center cursor-pointer p-2 rounded-full hover:bg-white/10 transition"
-              >
-                <img className="w-6" src={Stop} alt="stop button" />
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={startListening}
-                className="flex items-center justify-center cursor-pointer p-2 rounded-full hover:bg-white/10 transition"
-              >
-                <img className="w-6" src={Mic} alt="mic button" />
-              </button>
-            )}
+          {/* Right actions */}
+          <div className="flex items-center gap-1 pr-2">
+            {/* Mic */}
+            <button
+              type="button"
+              onClick={isListening ? stopListening : startListening}
+              title={isListening ? "Stop recording" : "Voice input"}
+              className={`p-2 rounded-lg transition-all duration-200 ${
+                isListening
+                  ? "text-[#ef4444] bg-[#ef4444]/10"
+                  : "text-[#52525b] hover:text-[#a1a1aa] hover:bg-[#1f1f23]"
+              }`}
+            >
+              {isListening ? (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="6" y="6" width="12" height="12" rx="2"/>
+                </svg>
+              ) : (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                  <line x1="8" y1="22" x2="16" y2="22"/>
+                </svg>
+              )}
+            </button>
 
+            {/* Send */}
             <button
               type="submit"
-              className="flex items-center justify-center cursor-pointer p-2 rounded-full hover:bg-white/10 transition"
+              title="Send message"
+              className="p-2 rounded-lg bg-[#7c3aed] text-white hover:bg-[#6d28d9] transition-all duration-200 active:scale-95 shadow-[0_0_8px_rgba(124,58,237,0.3)]"
             >
-              <img className="w-7" src={Search} alt="search button" />
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22,2 15,22 11,13 2,9"/>
+              </svg>
             </button>
           </div>
         </div>
+
+        <p className="text-center text-[10px] text-[#3f3f46] mt-2.5">
+          Ultron can make mistakes. Verify important information.
+        </p>
       </form>
-    </>
+    </div>
   );
 };
 

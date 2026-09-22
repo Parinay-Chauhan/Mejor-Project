@@ -16,67 +16,64 @@ const Header = ({ isGuest = false, onLoginClick }) => {
   };
 
   return (
-    <div className="w-full border-b border-[#4c4c4c] flex items-center justify-between shrink-0 bg-[#212121]">
+    <header className="w-full shrink-0 flex items-center justify-between px-4 md:px-6 py-3 border-b border-[#1f1f23] bg-[#09090b]/95 backdrop-blur-sm">
 
-      {/* Left — Logo + Title */}
-      <div className="flex items-center">
-        <div className="p-2 md:p-3 pl-4 md:pl-7">
-          <img
-            className="p-1.5 md:p-2 bg-[#7c3aed] size-8 md:size-10 rounded-xl md:rounded-2xl"
-            src={whiterobo}
-            alt="image"
-          />
+      {/* Left — Brand */}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#7c3aed] shadow-[0_0_12px_rgba(124,58,237,0.4)]">
+          <img className="w-4 h-4" src={whiterobo} alt="Ultron AI" />
         </div>
-        <div className="ml-2">
-          <h1 className="text-white pt-1 text-lg leading-7 font-normal font-segoe">New writing session</h1>
-          <p className="text-[#757474] text-[10px] md:text-xs font-semibold hidden sm:block">
-            {isGuest
-              ? "Guest Mode — Chat won't be saved"
-              : "Ai writing Assistant : Always improving."}
+        <div>
+          <span className="text-[#fafafa] text-sm font-semibold tracking-tight">Ultron</span>
+          <p className="text-[10px] text-[#52525b] font-medium leading-none mt-0.5 hidden sm:block">
+            {isGuest ? "Guest session · history not saved" : "AI Writing Assistant"}
           </p>
         </div>
       </div>
 
-      {/* Right — Buttons */}
-      <div className="btn-con flex items-center gap-3 md:gap-4 mr-4 md:mr-8">
-
-        {/* New Session button (always visible) */}
+      {/* Right — Actions */}
+      <div className="flex items-center gap-2">
+        {/* New Session */}
         <button
           onClick={handleNewSession}
-          className="relative inline-flex h-8 md:h-10 overflow-hidden rounded-xl md:rounded-2xl p-[2px] focus:outline-none group transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(124,58,237,0.5)]"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium text-[#a1a1aa] bg-[#18181b] border border-[#27272a] hover:border-[#3f3f46] hover:text-[#fafafa] hover:bg-[#1f1f23] transition-all duration-200 active:scale-95"
         >
-          <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#4c1d95_0%,#c4b5fd_50%,#4c1d95_100%)]" />
-          <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] md:rounded-[14px] bg-[#0a0b14] px-3 md:px-5 text-[10px] md:text-xs font-extrabold tracking-[2px] md:tracking-[3px] text-white backdrop-blur-3xl transition-colors group-hover:bg-[#111322]">
-            NEW SESSION
-          </span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          New chat
         </button>
 
         {isGuest ? (
-          /* Guest → Show "Login to Save" button */
+          /* Guest → Save Chat */
           <button
             id="header-login-btn"
             onClick={onLoginClick}
-            className="relative inline-flex h-8 md:h-10 overflow-hidden rounded-xl md:rounded-2xl p-[2px] focus:outline-none group transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(124,58,237,0.6)]"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium text-white bg-[#7c3aed] hover:bg-[#6d28d9] transition-all duration-200 active:scale-95 shadow-[0_0_12px_rgba(124,58,237,0.3)]"
           >
-            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#7c3aed_0%,#c4b5fd_50%,#7c3aed_100%)]" />
-            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] md:rounded-[14px] bg-[#12082a] px-3 md:px-5 text-[10px] md:text-xs font-extrabold tracking-[2px] md:tracking-[3px] text-[#c4b5fd] backdrop-blur-3xl transition-colors group-hover:bg-[#1a0a3a]">
-              💾 SAVE CHAT
-            </span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17,21 17,13 7,13 7,21"/>
+              <polyline points="7,3 7,8 15,8"/>
+            </svg>
+            Save chat
           </button>
         ) : (
-          /* Logged-in → Show Logout button */
+          /* Logged-in → Logout */
           <button
             onClick={handleLogout}
-            className="relative inline-flex h-8 md:h-10 overflow-hidden rounded-xl md:rounded-2xl p-[2px] focus:outline-none group transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium text-[#a1a1aa] bg-[#18181b] border border-[#27272a] hover:border-[#ef4444]/40 hover:text-[#ef4444] hover:bg-[#1f1f23] transition-all duration-200 active:scale-95"
           >
-            <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#7f1d1d_0%,#fca5a5_50%,#7f1d1d_100%)]" />
-            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[10px] md:rounded-[14px] bg-[#0a0b14] px-3 md:px-5 text-[10px] md:text-xs font-extrabold tracking-[2px] md:tracking-[3px] text-white backdrop-blur-3xl transition-colors group-hover:bg-[#1a0f0f]">
-              LOGOUT
-            </span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16,17 21,12 16,7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Sign out
           </button>
         )}
       </div>
-    </div>
+    </header>
   );
 };
 

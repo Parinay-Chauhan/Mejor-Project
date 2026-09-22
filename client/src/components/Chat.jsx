@@ -188,7 +188,7 @@ const Chat = () => {
   }
 
   return (
-    <div className='relative z-0 w-full h-[100dvh] flex justify-center items-center flex-col overflow-hidden' style={{ backgroundColor: '#000000' }}>
+    <div className='relative z-0 w-full h-[100dvh] flex justify-center items-center flex-col overflow-hidden' style={{ backgroundColor: '#09090b' }}>
       <Header
         isGuest={isGuest}
         onLoginClick={() => setShowLoginModal(true)}

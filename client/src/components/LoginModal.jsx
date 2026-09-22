@@ -8,7 +8,6 @@ const LoginModal = ({ onClose, apiBaseUrl }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [mode, setMode] = useState("login"); // "login" | "register"
 
-  // Close on Escape key
   useEffect(() => {
     const handleKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handleKey);
@@ -18,7 +17,7 @@ const LoginModal = ({ onClose, apiBaseUrl }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username.trim() || !password.trim()) {
-      setError("Username aur password dono required hain.");
+      setError("Username and password are both required.");
       return;
     }
 
@@ -32,13 +31,9 @@ const LoginModal = ({ onClose, apiBaseUrl }) => {
 
       const { data } = await axios.post(endpoint, { username: username.trim(), password });
 
-      // Save session token and reload to switch to logged-in mode
       const token = data.data?.sessionToken || data.data?.accessToken;
-      if (token) {
-        localStorage.setItem("mejor_session_token", token);
-      }
+      if (token) localStorage.setItem("mejor_session_token", token);
 
-      // Clear old guest session and reload
       sessionStorage.removeItem("chat_session_id");
       window.location.reload();
 
@@ -53,49 +48,51 @@ const LoginModal = ({ onClose, apiBaseUrl }) => {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
+        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="relative w-full max-w-md bg-[#1a1a1a] border border-[#333] rounded-2xl shadow-2xl shadow-[#7c3aed]/20 overflow-hidden">
+        <div className="relative w-full max-w-sm bg-[#111113] border border-[#27272a] rounded-2xl shadow-2xl overflow-hidden fade-up">
 
-          {/* Top purple glow line */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#7c3aed] to-transparent" />
+          {/* Top accent line */}
+          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed] to-transparent" />
 
-          {/* Close button */}
+          {/* Close */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-[#666] hover:text-white transition-colors text-xl leading-none"
+            className="absolute top-3.5 right-3.5 w-7 h-7 flex items-center justify-center rounded-lg text-[#52525b] hover:text-[#fafafa] hover:bg-[#1f1f23] transition-all"
           >
-            ✕
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
           </button>
 
-          <div className="p-8 pt-10">
-            {/* Icon */}
-            <div className="w-14 h-14 bg-[#7c3aed] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#7c3aed]/40">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 8V4H8" />
-                <rect width="16" height="12" x="4" y="8" rx="2" />
-                <path d="M2 14h2M20 14h2M9 13v2M15 13v2" />
+          <div className="p-7">
+            {/* Logo */}
+            <div className="w-10 h-10 bg-[#7c3aed] rounded-xl flex items-center justify-center mx-auto mb-5 shadow-[0_0_20px_rgba(124,58,237,0.35)]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
               </svg>
             </div>
 
             {/* Title */}
-            <h2 className="text-white text-2xl font-bold text-center mb-1">
-              {mode === "login" ? "Save Your Chat" : "Create Account"}
+            <h2 className="text-[#fafafa] text-xl font-semibold text-center tracking-tight">
+              {mode === "login" ? "Welcome back" : "Create account"}
             </h2>
-            <p className="text-[#888] text-sm text-center mb-7">
+            <p className="text-[#71717a] text-xs text-center mt-1.5 mb-6">
               {mode === "login"
-                ? "Login to save your chat history."
-                : "Create a new account and save your chats."}
+                ? "Sign in to save and access your chat history"
+                : "Register to save your conversations"}
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label className="block text-[#ccc] text-sm font-semibold mb-2">
+                <label className="block text-[#a1a1aa] text-xs font-medium mb-1.5">
                   Username
                 </label>
                 <input
@@ -103,15 +100,15 @@ const LoginModal = ({ onClose, apiBaseUrl }) => {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter username..."
+                  placeholder="your_username"
                   autoComplete="username"
                   autoFocus
-                  className="w-full h-12 bg-[#111] border border-[#333] hover:border-[#555] focus:border-[#7c3aed] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.15)] rounded-xl px-4 text-white text-sm outline-none transition-all placeholder-[#555]"
+                  className="w-full h-10 bg-[#09090b] border border-[#27272a] hover:border-[#3f3f46] focus:border-[#7c3aed] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] rounded-xl px-3.5 text-[#fafafa] text-sm outline-none transition-all placeholder-[#3f3f46]"
                 />
               </div>
 
               <div>
-                <label className="block text-[#ccc] text-sm font-semibold mb-2">
+                <label className="block text-[#a1a1aa] text-xs font-medium mb-1.5">
                   Password
                 </label>
                 <input
@@ -119,53 +116,61 @@ const LoginModal = ({ onClose, apiBaseUrl }) => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password..."
+                  placeholder="••••••••"
                   autoComplete="current-password"
-                  className="w-full h-12 bg-[#111] border border-[#333] hover:border-[#555] focus:border-[#7c3aed] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.15)] rounded-xl px-4 text-white text-sm outline-none transition-all placeholder-[#555]"
+                  className="w-full h-10 bg-[#09090b] border border-[#27272a] hover:border-[#3f3f46] focus:border-[#7c3aed] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] rounded-xl px-3.5 text-[#fafafa] text-sm outline-none transition-all placeholder-[#3f3f46]"
                 />
               </div>
 
-              {/* Error message */}
+              {/* Error */}
               {error && (
-                <p className="text-red-400 text-sm text-center bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-2">
+                <div className="flex items-start gap-2 text-[#f87171] text-xs bg-[#f87171]/8 border border-[#f87171]/20 rounded-xl px-3.5 py-2.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0 mt-0.5">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
                   {error}
-                </p>
+                </div>
               )}
 
-              {/* Submit button */}
+              {/* Submit */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-12 bg-[#7c3aed] hover:bg-[#6d28d9] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed rounded-xl text-white text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#7c3aed]/30 hover:shadow-[#7c3aed]/50 mt-2"
+                className="w-full h-10 bg-[#7c3aed] hover:bg-[#6d28d9] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white text-sm font-medium transition-all shadow-[0_0_12px_rgba(124,58,237,0.3)] mt-1"
               >
-                {isLoading
-                  ? "Please wait..."
-                  : mode === "login" ? "Login & Save Chat" : "Register & Start"}
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                    </svg>
+                    Please wait…
+                  </span>
+                ) : (
+                  mode === "login" ? "Sign in" : "Create account"
+                )}
               </button>
             </form>
 
             {/* Mode toggle */}
-            <p className="text-center text-[#666] text-sm mt-5">
-              {mode === "login" ? "Don't have an account? " : "Already have an account? "}
+            <p className="text-center text-[#52525b] text-xs mt-4">
+              {mode === "login" ? "No account? " : "Have an account? "}
               <button
                 type="button"
                 onClick={() => { setMode(mode === "login" ? "register" : "login"); setError(""); }}
-                className="text-[#a78bfa] hover:text-[#c4b5fd] font-semibold transition-colors"
+                className="text-[#a78bfa] hover:text-[#c4b5fd] font-medium transition-colors"
               >
-                {mode === "login" ? "Register" : "Login"}
+                {mode === "login" ? "Register" : "Sign in"}
               </button>
             </p>
 
-            {/* Guest continue option */}
-            <p className="text-center text-[#555] text-xs mt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="hover:text-[#888] transition-colors underline underline-offset-2"
-              >
-                Continue as guest (chat won't be saved)
-              </button>
-            </p>
+            {/* Guest option */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full text-center text-[#3f3f46] hover:text-[#52525b] text-xs mt-3 transition-colors"
+            >
+              Continue as guest ↗
+            </button>
           </div>
         </div>
       </div>
