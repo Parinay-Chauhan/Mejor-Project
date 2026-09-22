@@ -64,8 +64,8 @@ router.post("/api/session-token", requireApiAuth, (req, res) => {
   res.json({ token, userId: req.user.id, username: req.user.username });
 });
 
-// Start AI Agent for a channel
-router.post("/start-ai-agent", requireApiAuth, async (req, res) => {
+// Start AI Agent for a channel (no auth required — works for guest and logged-in)
+router.post("/start-ai-agent", async (req, res) => {
   const { channel_id, channel_type = "messaging" } = req.body;
   console.log(`[API] /start-ai-agent called for channel: ${channel_id}`);
 
@@ -119,8 +119,8 @@ router.post("/start-ai-agent", requireApiAuth, async (req, res) => {
   }
 });
 
-// Stop AI Agent for a channel
-router.post("/stop-ai-agent", requireApiAuth, async (req, res) => {
+// Stop AI Agent for a channel (no auth required)
+router.post("/stop-ai-agent", async (req, res) => {
   const { channel_id } = req.body;
   console.log(`[API] /stop-ai-agent called for channel: ${channel_id}`);
   const user_id = `ai-bot-${channel_id.replace(/[!]/g, "")}`;
@@ -143,8 +143,8 @@ router.post("/stop-ai-agent", requireApiAuth, async (req, res) => {
   }
 });
 
-// Check AI Agent status
-router.get("/agent-status", requireApiAuth, (req, res) => {
+// Check AI Agent status (no auth required)
+router.get("/agent-status", (req, res) => {
   const { channel_id } = req.query;
   if (!channel_id || typeof channel_id !== "string") {
     return res.status(400).json({ error: "Missing channel_id" });
