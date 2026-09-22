@@ -18,6 +18,7 @@ const Chat = () => {
   const [client, setClient] = useState(null);
   const [isGuest, setIsGuest] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     let chatClient = null;
@@ -98,6 +99,7 @@ const Chat = () => {
            .catch(err => console.error("Error starting AI agent:", err));
 
       listenToChannel(newChannel);
+      setIsInitialized(true);
     };
 
     const initGuestMode = async () => {
@@ -126,6 +128,7 @@ const Chat = () => {
            .catch(err => console.error("Error starting AI agent:", err));
 
       listenToChannel(newChannel);
+      setIsInitialized(true);
     };
 
     const listenToChannel = (ch) => {
@@ -171,6 +174,13 @@ const Chat = () => {
     } catch (err) {
       console.error("Error sending message", err);
     }
+  }
+
+  // Show nothing until chat is fully initialized — prevents flash of wrong UI
+  if (!isInitialized) {
+    return (
+      <div style={{ backgroundColor: '#000000', width: '100vw', height: '100dvh' }} />
+    );
   }
 
   return (
