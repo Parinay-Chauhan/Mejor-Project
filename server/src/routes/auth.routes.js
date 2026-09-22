@@ -29,14 +29,9 @@ router.get("/api/v1/users/me", getCurrentUser);
 
 // ─── Legacy EJS Routes (for existing frontend redirect flow) ─────────────────
 
-// Redirect root to app or login
+// Redirect root to Vercel frontend (not EJS login anymore)
 router.get("/", (req, res) => {
-  if (req.user) {
-    const token = createSessionToken(req.user.id || req.user.username);
-    res.redirect(`https://mejor-project-sigma.vercel.app/?session_token=${token}`);
-  } else {
-    res.redirect("/login");
-  }
+  res.redirect("https://mejor-project-sigma.vercel.app");
 });
 
 // Show login page (EJS)
