@@ -45,11 +45,15 @@ const Chat = () => {
 
       } catch (error) {
         console.error("Failed to initialize chat:", error);
-        // On any error, fall back to guest mode
+        // Reset state before falling back to guest mode — prevents stale logged-in state
+        setClient(null);
+        setIsGuest(false);
+        setIsInitialized(false);
         try {
           await initGuestMode();
         } catch (guestErr) {
           console.error("Guest mode also failed:", guestErr);
+          setIsInitialized(true); // show something even if both fail
         }
       }
     };
