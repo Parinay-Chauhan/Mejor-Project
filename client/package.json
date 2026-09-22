@@ -16,6 +16,7 @@
     "react-dom": "^19.2.6",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.17.0",
+    "remark-gfm": "^4.0.1",
     "socket.io-client": "^4.8.3",
     "stream-chat": "^9.45.1",
     "tailwindcss": "^4.3.0"
