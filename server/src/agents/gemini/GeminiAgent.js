@@ -1,6 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GeminiResponseHandler } from "./GeminiResponseHandler.js";
-import fs from "fs";
 
 class GeminiAgent {
     constructor(chatClient, channel) {
@@ -27,7 +26,7 @@ class GeminiAgent {
 
             this.genAI = new GoogleGenerativeAI(apiKey);
             // We use the 1.5 flash model which is very fast and suitable for general chat
-            this.model = this.genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+            this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
             this.channel.on("message.new", this.handleMessage);
 
@@ -86,8 +85,7 @@ class GeminiAgent {
             const message = eventMessage.text;
             if (!message) return;
 
-            console.log(`[GeminiAgent] Received message from user: ${message}`);
-            fs.appendFileSync('b:\\\\Coding\\\\WebMainProject\\\\Mejor-Project\\\\chatbackend\\\\debug.log', `[GeminiAgent] Received message: ${message}\\n`);
+            console.log(`[GeminiAgent] Received message: ${message}`);
             this.lastInteractionTs = Date.now();
 
             const writingTask = eventMessage.custom?.writingTask;
@@ -96,9 +94,8 @@ class GeminiAgent {
 
             let channelMessage = null;
             try {
-                // Dynamically instantiate the model to pass dynamic system instructions
                 const model = this.genAI.getGenerativeModel({
-                    model: "gemini-3.5-flash",
+                    model: "gemini-2.0-flash",
                     systemInstruction: instructions,
                 });
 
@@ -159,7 +156,7 @@ class GeminiAgent {
                 });
 
                 // Fallback mechanism to handle 503 High Demand errors
-                const modelsToTry = ["gemini-3.5-flash", "gemini-flash-latest", "gemini-2.5-flash"];
+                const modelsToTry = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-2.5-flash"];
                 let resultStream = null;
                 let lastError = null;
 
